@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#F7A0D4" />
+  <title>Mototaxi J</title>
+
+  <!-- Manifest con ruta absoluta para mayor compatibilidad -->
+  <link rel="manifest" href="/mototaxi-j/manifest.json" />
+
+  <!-- Ícono para Apple -->
+  <link rel="apple-touch-icon" href="/mototaxi-j/icon-192.png" />
+
+  <!-- Estilos -->
+  <link rel="stylesheet" href="/mototaxi-j/main.css" />
+
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+</head>
+<body>
+  <header class="header">
+    <h1 id="titulo-fecha">Cargando...</h1>
+    <div class="resumen" id="resumen-diario">
+      Iniciando...
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div id="panel-empezar" style="display: none;">
+      <h2>¿Con cuánto empiezas hoy?</h2>
+      <input type="number" id="monto-inicial" class="campo" placeholder="Ej: 20000" inputmode="numeric" />
+      <button id="btn-empezar" class="boton principal">🏁 Empezar jornada</button>
+    </div>
+
+    <div id="acciones-diarias" style="display: none;">
+      <button id="btn-nueva-carrera" class="boton">➕ Nueva carrera</button>
+      <button id="btn-nuevo-gasto" class="boton">➖ Nuevo gasto</button>
+      <button id="btn-ver-otro-dia" class="boton">📅 Ver otro día</button>
+      <button id="btn-cerrar-jornada" class="boton">⏹️ Cerrar jornada</button>
+    </div>
+
+    <div id="lista-registros" class="lista-items"></div>
+    <div id="mensaje-vacio" class="mensaje" style="display: none;">
+      No hay registros aún.
+    </div>
+  </main>
+
+  <!-- Panel: Nueva carrera -->
+  <div id="panel-carrera" class="panel">
+    <div class="panel-header">
+      <h2>Registrar carrera</h2>
+      <button class="cerrar-panel" id="cerrar-carrera">&times;</button>
+    </div>
+    <input type="number" id="monto-carrera" class="campo" placeholder="Monto" inputmode="numeric" />
+    
+    <div class="botones-montos">
+      <div class="boton-monto" data-monto="3000">$3.000</div>
+      <div class="boton-monto" data-monto="4000">$4.000</div>
+      <div class="boton-monto" data-monto="5000">$5.000</div>
+      <div class="boton-monto" data-monto="6000">$6.000</div>
+    </div>
+
+    <div class="metodos-pago" id="metodos-carrera">
+      <div class="metodo" data-metodo="efectivo">💵 Efectivo</div>
+      <div class="metodo" data-metodo="nequi">📱 Nequi</div>
+      <div class="metodo" data-metodo="fiada">🤝 Fiada</div>
+    </div>
+
+    <input type="text" id="nota-carrera" class="campo" placeholder="Nota (opcional)" maxlength="50" />
+
+    <button id="guardar-carrera" class="boton principal">✅ Guardar carrera</button>
+  </div>
+
+  <!-- Panel: Nuevo gasto -->
+  <div id="panel-gasto" class="panel">
+    <div class="panel-header">
+      <h2>Registrar gasto</h2>
+      <button class="cerrar-panel" id="cerrar-gasto">&times;</button>
+    </div>
+    <input type="number" id="monto-gasto" class="campo" placeholder="Monto" inputmode="numeric" />
+    
+    <div class="metodos-pago" id="categorias-gasto">
+      <div class="metodo" data-categoria="gasolina">⛽ Gasolina</div>
+      <div class="metodo" data-categoria="comida">🍔 Comida</div>
+      <div class="metodo" data-categoria="reparacion">🔧 Reparación</div>
+      <div class="metodo" data-categoria="otro">✏️ Otro</div>
+    </div>
+
+    <input type="text" id="nota-gasto" class="campo" placeholder="Nota (opcional)" maxlength="50" />
+
+    <button id="guardar-gasto" class="boton principal">✅ Guardar gasto</button>
+  </div>
+
+  <!-- Panel: Cerrar jornada -->
+  <div id="panel-cierre" class="panel">
+    <div class="panel-header">
+      <h2>Cerrar jornada</h2>
+      <button class="cerrar-panel" id="cerrar-cierre">&times;</button>
+    </div>
+    <div id="resumen-cierre"></div>
+    <label>Dinero para Karen (opcional)</label>
+    <input type="number" id="ahorro-karen" class="campo" placeholder="Ej: 5000" inputmode="numeric" />
+    <button id="btn-confirmar-cierre" class="boton principal">✅ Cerrar y guardar día</button>
+  </div>
+
+  <!-- Scripts con rutas absolutas -->
+  <script src="/mototaxi-j/utils.js"></script>
+  <script src="/mototaxi-j/db.js"></script>
+  <script src="/mototaxi-j/app.js"></script>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/mototaxi-j/service-worker.js')
+          .catch(console.warn);
+      });
+    }
+  </script>
+</body>
+</html>
