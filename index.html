@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#F7A0D4" />
+  <title>Mototaxi J</title>
+
+  <link rel="manifest" href="/mototaxi-j/manifest.json" />
+  <link rel="apple-touch-icon" href="/mototaxi-j/icon-192.png" />
+  <link rel="stylesheet" href="/mototaxi-j/main.css" />
+
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+</head>
+<body>
+  <header class="header">
+    <h1 id="titulo-fecha">Cargando...</h1>
+    <div class="resumen" id="resumen-diario">
+      Iniciando...
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div id="panel-empezar" style="display: none;">
+      <h2>¿Con cuánto empiezas hoy?</h2>
+      <input type="number" id="monto-inicial" class="campo" placeholder="Ej: 20000" inputmode="numeric" />
+      <div class="botones-accion-form">
+        <button id="btn-empezar" class="boton principal">🏁 Empezar jornada</button>
+      </div>
+    </div>
+
+    <div id="acciones-diarias" style="display: none;">
+      <!-- Botones principales -->
+      <button id="btn-nueva-carrera" class="boton">➕ Nueva carrera</button>
+      <button id="btn-nuevo-gasto" class="boton">➖ Nuevo gasto</button>
+      <button id="btn-pago-deuda" class="boton">💳 Registrar pago de deuda</button>
+      <button id="btn-calculadora" class="boton">🧮 Calculadora</button>
+      <button id="btn-ver-otro-dia" class="boton">📅 Ver otro día</button>
+      <button id="btn-cerrar-jornada" class="boton">⏹️ Cerrar jornada</button>
+
+      <!-- Filtros -->
+      <div class="filtros" id="filtros-registros">
+        <button class="filtro activo" data-filtro="todo">Todo</button>
+        <button class="filtro" data-filtro="pagos">Pagos</button>
+        <button class="filtro" data-filtro="gastos">Gastos</button>
+        <button class="filtro" data-filtro="pendientes">Pendientes</button>
+      </div>
+
+      <!-- Lista de registros -->
+      <div id="lista-registros" class="lista-items"></div>
+      <div id="mensaje-vacio" class="mensaje" style="display: none;">
+        No hay registros aún.
+      </div>
+    </div>
+  </main>
+
+  <!-- Panel: Nueva carrera -->
+  <div id="panel-carrera" class="panel">
+    <div class="panel-header">
+      <h2>Registrar carrera</h2>
+      <button class="cerrar-panel" id="cerrar-carrera">&times;</button>
+    </div>
+    <input type="number" id="monto-carrera" class="campo" placeholder="Monto" inputmode="numeric" />
+    
+    <div class="botones-montos">
+      <div class="boton-monto" data-monto="3000">$3.000</div>
+      <div class="boton-monto" data-monto="4000">$4.000</div>
+      <div class="boton-monto" data-monto="5000">$5.000</div>
+      <div class="boton-monto" data-monto="6000">$6.000</div>
+    </div>
+
+    <div class="metodos-pago" id="metodos-carrera">
+      <div class="metodo" data-metodo="efectivo">💵 Efectivo</div>
+      <div class="metodo" data-metodo="nequi">📱 Nequi</div>
+      <div class="metodo" data-metodo="fiada">🤝 Fiada</div>
+    </div>
+
+    <input type="text" id="nota-carrera" class="campo" placeholder="Nota (opcional)" maxlength="50" />
+
+    <div class="botones-accion-form">
+      <button id="cancelar-carrera" class="boton">Cancelar</button>
+      <button id="guardar-carrera" class="boton principal">✅ Guardar carrera</button>
+    </div>
+  </div>
+
+  <!-- Panel: Nuevo gasto -->
+  <div id="panel-gasto" class="panel">
+    <div class="panel-header">
+      <h2>Registrar gasto</h2>
+      <button class="cerrar-panel" id="cerrar-gasto">&times;</button>
+    </div>
+    <input type="number" id="monto-gasto" class="campo" placeholder="Monto" inputmode="numeric" />
+    
+    <div class="metodos-pago" id="categorias-gasto">
+      <div class="metodo" data-categoria="gasolina">⛽ Gasolina</div>
+      <div class="metodo" data-categoria="comida">🍔 Comida</div>
+      <div class="metodo" data-categoria="reparacion">🔧 Reparación</div>
+      <div class="metodo" data-categoria="otro">✏️ Otro</div>
+    </div>
+
+    <input type="text" id="nota-gasto" class="campo" placeholder="Nota (opcional)" maxlength="50" />
+
+    <div class="botones-accion-form">
+      <button id="cancelar-gasto" class="boton">Cancelar</button>
+      <button id="guardar-gasto" class="boton principal">✅ Guardar gasto</button>
+    </div>
+  </div>
+
+  <!-- Panel: Pago de deuda -->
+  <div id="panel-pago-deuda" class="panel">
+    <div class="panel-header">
+      <h2>Pagos de deudas pendientes</h2>
+      <button class="cerrar-panel" id="cerrar-pago-deuda">&times;</button>
+    </div>
+    <div id="lista-deudas-pendientes" class="lista-items">
+      <!-- Se llenará dinámicamente -->
+      <div class="mensaje">Cargando deudas...</div>
+    </div>
+    <div id="mensaje-sin-deudas" class="mensaje" style="display:none;">
+      No hay deudas pendientes.
+    </div>
+  </div>
+
+  <!-- Panel: Calculadora -->
+  <div id="panel-calculadora" class="panel">
+    <div class="panel-header">
+      <h2>Calculadora</h2>
+      <button class="cerrar-panel" id="cerrar-calculadora">&times;</button>
+    </div>
+    <div id="pantalla-calculadora" class="pantalla-calculadora">
+      0
+    </div>
+    <div id="operacion-calculadora" class="operacion-calculadora">
+      <!-- Ej: 5000 + 3000 -->
+    </div>
+    <div class="teclado-calculadora">
+      <button data-valor="7">7</button>
+      <button data-valor="8">8</button>
+      <button data-valor="9">9</button>
+      <button data-valor="C" class="accion">C</button>
+      <button data-valor="4">4</button>
+      <button data-valor="5">5</button>
+      <button data-valor="6">6</button>
+      <button data-valor="+">+</button>
+      <button data-valor="1">1</button>
+      <button data-valor="2">2</button>
+      <button data-valor="3">3</button>
+      <button data-valor="-">-</button>
+      <button data-valor="0">0</button>
+      <button data-valor=".">.</button>
+      <button data-valor="=" class="igual">=</button>
+      <button data-valor="*">×</button>
+    </div>
+    <div class="botones-accion-form">
+      <button id="usar-resultado" class="boton" style="display:none;">Usar resultado</button>
+      <button id="cancelar-calculadora" class="boton">Cerrar</button>
+    </div>
+  </div>
+
+  <!-- Panel: Cerrar jornada -->
+  <div id="panel-cierre" class="panel">
+    <div class="panel-header">
+      <h2>Cerrar jornada</h2>
+      <button class="cerrar-panel" id="cerrar-cierre">&times;</button>
+    </div>
+    <div id="resumen-cierre"></div>
+    <label>Dinero para Karen (opcional)</label>
+    <input type="number" id="ahorro-karen" class="campo" placeholder="Ej: 5000" inputmode="numeric" />
+    <div class="botones-accion-form">
+      <button id="cancelar-cierre" class="boton">Cancelar</button>
+      <button id="btn-confirmar-cierre" class="boton principal">✅ Cerrar y guardar día</button>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="/mototaxi-j/utils.js"></script>
+  <script src="/mototaxi-j/db.js"></script>
+  <script src="/mototaxi-j/app.js"></script>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/mototaxi-j/service-worker.js')
+          .catch(console.warn);
+      });
+    }
+  </script>
+</body>
+</html>
